@@ -91,7 +91,7 @@ class Word:
             self.words = [w.strip() for w in f.readlines()]
         self.word = choice(self.words).upper()  # random word from file
         self.letters = set(self.word)
-        self.word_progress = ['.' for i in range(len(self.word))]
+        self.word_progress = ['.' for _ in range(len(self.word))]
         self.guessed_letters = []
         self.guessed_words = []
 
@@ -113,7 +113,7 @@ class Game:
         print('Слово: ', end='')
         print(*self.word.word_progress)
         print('Ранее введенные буквы:', end=' ')
-        print(*sorted(self.word.guessed_letters), sep = ', ')
+        print(*sorted(self.word.guessed_letters), sep=', ')
         print()
 
     def good_letter(self, char):
@@ -131,7 +131,7 @@ class Game:
         print('Слово: ', end='')
         print(*self.word.word_progress)
         print('Ранее введенные слова:', end=' ')
-        print(*sorted(self.word.guessed_words), sep = ', ')
+        print(*sorted(self.word.guessed_words), sep=', ')
         print()
 
     def game(self):
