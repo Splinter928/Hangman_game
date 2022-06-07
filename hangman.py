@@ -1,102 +1,6 @@
 import string
-from random import choice
-
-
-class Display:
-
-    def __init__(self):
-        self.condition = 6
-
-    def display_hangman(self, stage_number=6):
-        self.condition = stage_number
-        stages = [
-            # final stage - head, body, 2 arms and 2 legs
-            '''
-               --------
-               |      |
-               |      O
-               |     \\|/
-               |      |
-               |     / \\
-               -
-            ''',
-            # head, body, 2 arms and 1 leg
-            '''
-               --------
-               |      |
-               |      O
-               |     \\|/
-               |      |
-               |     / 
-               -
-            ''',
-            # head, body and 2 arms
-            '''
-               --------
-               |      |
-               |      O
-               |     \\|/
-               |      |
-               |      
-               -
-            ''',
-            # head, body and 1 arm
-            '''
-               --------
-               |      |
-               |      O
-               |     \\|
-               |      |
-               |     
-               -
-            ''',
-            # head and body
-            '''
-               --------
-               |      |
-               |      O
-               |      |
-               |      |
-               |     
-               -
-            ''',
-            # head
-            '''
-               --------
-               |      |
-               |      O
-               |    
-               |      
-               |     
-               -
-            ''',
-            # starting condition
-            '''
-               --------
-               |      |
-               |      
-               |    
-               |      
-               |     
-               -
-            '''
-        ]
-        print(stages[self.condition])
-
-
-class Word:
-
-    def __init__(self):
-        with open('words.txt', encoding='utf-8') as f:
-            self.words = [w.strip() for w in f.readlines()]
-        self.word = choice(self.words).upper()  # random word from file
-        self.letters = set(self.word)
-        self.word_progress = ['.' for _ in range(len(self.word))]
-        self.guessed_letters = []
-        self.guessed_words = []
-
-    def get_word(self):
-        return self.word
+from display import Display
+from words import Word
 
 
 class Game:
@@ -134,6 +38,8 @@ class Game:
         print(*sorted(self.word.guessed_words), sep=', ')
         print()
 
+    # def check_word(self, current_word):
+
     def game(self):
 
         print(f'Сыграем в виселицу? Доступное количество попыток: {self.tries}')
@@ -142,7 +48,6 @@ class Game:
 
         while self.tries > 0:
             char = input('Введите букву или слово:\n').upper()
-
             if not char.isalpha() or char in string.ascii_uppercase:
                 print('Вводите русскую букву или слово целиком!')
                 continue
@@ -179,8 +84,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    is_game = 'да'
-    while is_game.lower() == 'да' or is_game.lower() == 'lf':
-        g = Game()
-        g.game()
-        is_game = input('Хотите попробовать снова? Введите "да", чтобы продолжить или "нет" для выхода.\n')
+    g = Game()
+    g.game()
