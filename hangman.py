@@ -38,6 +38,15 @@ class Game:
         print(*sorted(self.word.guessed_words), sep=', ')
         print()
 
+    def check_start(self, char):
+        if not char.isalpha() or char in string.ascii_uppercase:
+            print('Вводите русскую букву или слово целиком!')
+            return False
+        elif char in self.word.guessed_words or char in self.word.guessed_letters:
+            print('Вы уже вводили такой вариант! Попробуйте что-то новенькое.')
+            return False
+        return True
+
     def check_word(self, current_word):
         if current_word == self.word.word:
             self.guessed = True
@@ -71,11 +80,7 @@ class Game:
 
         while self.tries > 0 and not self.guessed:
             char = input('Введите букву или слово:\n').upper()
-            if not char.isalpha() or char in string.ascii_uppercase:
-                print('Вводите русскую букву или слово целиком!')
-                continue
-            elif char in self.word.guessed_words or char in self.word.guessed_letters:
-                print('Вы уже вводили такой вариант! Попробуйте что-то новенькое.')
+            if not self.check_start(char):
                 continue
             elif len(char) > 1:
                 self.check_word(char)
