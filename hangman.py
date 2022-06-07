@@ -6,7 +6,7 @@ from words import Word
 class Game:
 
     def __init__(self):
-        self.guessed = False  # signal flag
+        self.guessed = False  # signal flag1
         self.tries = 6  # number of available tries
         self.word = Word()
         self.hangman = Display()
@@ -38,7 +38,30 @@ class Game:
         print(*sorted(self.word.guessed_words), sep=', ')
         print()
 
-    # def check_word(self, current_word):
+    def check_word(self, current_word):
+        if current_word == self.word.word:
+            self.guessed = True
+        elif current_word != self.word.word:
+            self.tries -= 1
+            self.word.guessed_words.append(current_word)
+            self.bad_word()
+
+    def check_letter(self, current_letter):
+        if current_letter not in self.word.word:
+            self.tries -= 1
+            self.word.guessed_letters.append(current_letter)
+            self.bad_letter()
+        elif current_letter in self.word.word:
+            self.word.guessed_letters.append(current_letter)
+            self.good_letter(current_letter)
+        if ''.join(self.word.word_progress) == self.word.word:
+            self.guessed = True
+
+    def check_finish(self):
+        if self.guessed:
+            print('%s - правильный ответ! Вы победили!' % self.word.word)
+        else:
+            print('Слово было - %s. В этот раз не повезло :( Попробуйте снова!' % self.word.word)
 
     def game(self):
 
@@ -46,7 +69,7 @@ class Game:
         self.hangman.display_hangman()
         print(*self.word.word_progress)
 
-        while self.tries > 0:
+        while self.tries > 0 and not self.guessed:
             char = input('Введите букву или слово:\n').upper()
             if not char.isalpha() or char in string.ascii_uppercase:
                 print('Вводите русскую букву или слово целиком!')
@@ -54,33 +77,14 @@ class Game:
             elif char in self.word.guessed_words or char in self.word.guessed_letters:
                 print('Вы уже вводили такой вариант! Попробуйте что-то новенькое.')
                 continue
-            elif len(char) > 1 and char == self.word.word:
-                self.guessed = True
-                break
-            elif len(char) > 1 and char != self.word.word:
-                self.tries -= 1
-                self.word.guessed_words.append(char)
-                self.bad_word()
+            elif len(char) > 1:
+                self.check_word(char)
                 continue
-            elif len(char) == 1 and char not in self.word.word:
-                self.tries -= 1
-                self.word.guessed_letters.append(char)
-                self.bad_letter()
+            elif len(char) == 1:
+                self.check_letter(char)
                 continue
-            elif len(char) == 1 and char in self.word.word:
-                self.word.guessed_letters.append(char)
-                self.good_letter(char)
 
-                if ''.join(self.word.word_progress) == self.word.word:
-                    self.guessed = True
-                    break
-                else:
-                    continue
-
-        if self.guessed:
-            print('%s - правильный ответ! Вы победили!' % self.word.word)
-        else:
-            print('Слово было - %s. В этот раз не повезло :( Попробуйте снова!' % self.word.word)
+        self.check_finish()
 
 
 if __name__ == '__main__':
