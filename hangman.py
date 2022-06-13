@@ -69,8 +69,10 @@ class Game:
     def check_finish(self):
         if self.guessed:
             print('%s - правильный ответ! Вы победили!' % self.word.word)
+            return True
         else:
             print('Слово было - %s. В этот раз не повезло :( Попробуйте снова!' % self.word.word)
+            return False
 
     def game(self):
 
